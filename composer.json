@@ -1,0 +1,50 @@
+{
+  "name": "dpuk/project-template-wp",
+  "description": "The template used to start WordPress projects",
+  "authors": [
+    {
+     "name": "Daniel Pringle",
+     "email": "dan@danielpringle.co.uk"
+   }
+ ],
+  "type": "project",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*",
+        "wpackagist-theme/*"
+      ]
+    }, 
+    {
+      "type": "git",
+      "url": "https://bitbucket.org/investisdrupal/advanced-custom-fields-pro.git",
+      "no-api": true
+    }
+  ],
+  "require": {
+      "php": ">=7.4",
+      "vlucas/phpdotenv": "^5.4",
+      "oscarotero/env": "^2.1",
+      "johnpbloch/wordpress": "6.0.1",
+      "composer/installers": "2.1.1",
+      "wpackagist-theme/twentytwentyone": "1.5",
+      "wpackagist-plugin/redirection": "5.2.3",
+      "wpackagist-plugin/query-monitor": "3.10.1",
+      "wpackagist-plugin/contact-form-7":"5.5.6"
+  },
+  "extra": {
+      "wordpress-install-dir": "wp",
+      "installer-paths": {
+          "app/plugins/{$name}/": ["type:wordpress-plugin"],
+          "app/themes/{$name}/": ["type:wordpress-theme"]
+      }
+  },
+  "config": {
+    "allow-plugins": {
+      "johnpbloch/wordpress-core-installer": true,
+      "composer/installers": true
+    }
+  }
+}

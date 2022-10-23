@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  # Client build
+  cli:
+    environment:
+      # Make mysql environment variables from docksal.env available to the cli container.
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_PASSWORD
+      - MYSQL_USER
+      - MYSQL_HOST
+      - DOCKSAL_ENVIRONMENT
+
+      # Give the code running in the container a way to check if it is running within docksal.
+      - DOCKSAL=yes
+
+  # Database configuration
+  db:
+    volumes:
+      # Mount the db folder from the project root into the database container to allow it to
+      #  auto-import any .sql files in there.
+      - ${PROJECT_ROOT}/db:/docker-entrypoint-initdb.d:ro
+
+  # Add mailhog to the docksal services to start.
+  mail:
+    hostname: mail
+    image: mailhog/mailhog
+    expose:
+      - "80"
+    environment:
+      - MH_API_BIND_ADDR=0.0.0.0:80
+      - MH_UI_BIND_ADDR=0.0.0.0:80
+    labels:
+      - io.docksal.virtual-host=mail.${VIRTUAL_HOST}
+    user: root
+
+  # PHPMyAdmin
+  pma:
+    hostname: pma
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+    labels:
+      - io.docksal.virtual-host=pma.${VIRTUAL_HOST}
